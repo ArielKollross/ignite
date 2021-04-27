@@ -32,11 +32,12 @@ function getBalance(customer) {
     balance: 0,
   }
 
-  for (let record in customer.statement) {
-    if(record.type === "credit") {
-      balance.amount += record.amount
+  // [TODO] add loadash reduce
+  for (let i in customer.statement) {
+    if(customer.statement[i].type === "credit") {
+      balance.amount += customer.statement[i].amount
     } else {
-      balance.debit += record.amount 
+      balance.debit += customer.statement[i].amount 
     }
   }
 
@@ -94,6 +95,7 @@ app.post('/deposit', verifyExistsAccountDocument, (request, response) => {
   const { customer } = request;
 
   const statementOperation = {
+    transaction_id: uuidv4(),
     description,
     amount,
     type: 'credit',
@@ -109,7 +111,7 @@ app.post('/deposit', verifyExistsAccountDocument, (request, response) => {
 app.post('/withdrawal', verifyExistsAccountDocument, (request, response) => {
   const { description, amount } = request.body;
 
-  if( !description || amount ) {
+  if( !description || !amount ) {
     return response.status(400).json({ 
       "error": "fields description/amount are mandatory"
     });
@@ -117,9 +119,23 @@ app.post('/withdrawal', verifyExistsAccountDocument, (request, response) => {
 
   const { customer } = request;
 
-  const balance =  getBalance(customer);
+  const balance = getBalance(customer);
 
-  return response.status(201).json({ balance });
+  if(balance.balance < amount) {
+    return response.status(400).json({ "error": "Insufficient amount, operation canceled"})
+  }
+
+  const statementOperation = {
+    transaction_id: uuidv4(),
+    description,
+    amount,
+    type: 'debit',
+    created_at: new Date(),
+  };
+
+  customer.statement.push(statementOperation);
+
+  return response.status(201).json({ statementOperation });
 
 });
 
