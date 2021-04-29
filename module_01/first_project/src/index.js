@@ -83,6 +83,30 @@ app.get("/statement/", verifyExistsAccountDocument, (request, response) => {
   return response.status(200).json(customer.statement);
 });
 
+app.get("/statement/date", verifyExistsAccountDocument, (request, response) => {
+  const { customer } = request;
+  const { date } = request.headers;
+
+  if(!date) {
+    return response.status(400).json({ "error": "date is required"})
+  }
+
+  const dates = [];
+
+  for (let i in customer.statement) {
+    console.log(customer.statement[i].created_at);
+    if(customer.statement[i].created_at <= date ) {
+      dates.push(customer.statement[i]);
+    }
+  }
+
+  if(!dates) {
+    return response.status(200).json({ "message": "No data found"});
+  }
+
+  return response.status(200).json(dates);
+});
+
 app.post('/deposit', verifyExistsAccountDocument, (request, response) => {
   const { description, amount } = request.body;
 
@@ -99,7 +123,7 @@ app.post('/deposit', verifyExistsAccountDocument, (request, response) => {
     description,
     amount,
     type: 'credit',
-    created_at: new Date(),
+    created_at: new Date().valueOf(),
   };
 
   customer.statement.push(statementOperation);
@@ -130,7 +154,7 @@ app.post('/withdrawal', verifyExistsAccountDocument, (request, response) => {
     description,
     amount,
     type: 'debit',
-    created_at: new Date(),
+    created_at: new Date().valueOf(),
   };
 
   customer.statement.push(statementOperation);
@@ -138,5 +162,7 @@ app.post('/withdrawal', verifyExistsAccountDocument, (request, response) => {
   return response.status(201).json({ statementOperation });
 
 });
+
+
 
 app.listen(3333);
