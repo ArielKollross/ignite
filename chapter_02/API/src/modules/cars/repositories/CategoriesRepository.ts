@@ -1,12 +1,9 @@
-import _ from "lodash";
+import _ from 'lodash';
 
-import { Category } from "../models/Category";
-import {
-  ICategoriesRepository,
-  ICreateCategoryDTO,
-} from "./ICategoriesRepository";
+import { Category } from '../models/Category';
+import { ICreateCategoryDTO } from './ICategoriesRepository';
 
-class CategoryRepository implements ICategoriesRepository {
+class CategoryRepository {
   private categories: Category[];
 
   constructor() {
@@ -30,7 +27,7 @@ class CategoryRepository implements ICategoriesRepository {
   }
 
   findByName(name: string): Category {
-    const category = _.find(this.categories, ["name", name]);
+    const category = _.find(this.categories, ['name', name]);
     // const category = this.categories.find((category) => category.name === name);
 
     return category;
