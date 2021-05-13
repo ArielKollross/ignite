@@ -3,7 +3,7 @@ import _ from 'lodash';
 import { Category } from '../models/Category';
 import { ICreateCategoryDTO } from './ICategoriesRepository';
 
-class CategoryRepository {
+class CategoriesRepository {
   private categories: Category[];
 
   constructor() {
@@ -34,4 +34,4 @@ class CategoryRepository {
   }
 }
 
-export { CategoryRepository };
+export { CategoriesRepository };
