@@ -11,4 +11,12 @@ app.use(express.json());
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerFile));
 app.use(router);
 
-app.listen(3333, () => console.log('server is running!'));
+const urlBase = 'http://localhost:3333';
+
+app.listen(3333, () =>
+  console.log(`
+  \n
+server is running! \n
+API doc is running: ${urlBase}/api-docs/
+`)
+);
