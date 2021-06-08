@@ -3,6 +3,6 @@
     "port": 5432,
     "host": "localhost",
     "username": "docker",
-    "password": "database_ignite",
+    "password": "ignite",
     "database": "rentx"
 }
