@@ -69,6 +69,71 @@
                     }
                 }
             }
+        },
+        "/categories/import": {
+          "post": {
+            "tags": ["Category"],
+            "summary":"Upload a specification",
+            "description": "Upload csv file to import categories",
+            "requestBody": {
+              "content": {
+                "multipart/form-data": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "file": {
+                        "type":"string",
+                        "format": "binary"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "responses": {
+              "201": {
+                "description": "Created"
+              }
+            }
+          }
+        },
+        "/specification": {
+          "post": {
+            "tags": ["Specification"],
+            "summary":"Create a specification",
+            "description": "Create a new specification",
+            "requestBody": {
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/definitions/Specifications"
+                  }
+                }
+              }
+            },
+            "responses": {
+              "201": {
+                "description": "Created"
+              },
+              "500": {
+                "description": "Specification already exists"
+              }
+            }
+          }
         }
+    },
+  "definitions": {
+    "Specifications": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        }
+        
+      }
     }
+  }
 }
