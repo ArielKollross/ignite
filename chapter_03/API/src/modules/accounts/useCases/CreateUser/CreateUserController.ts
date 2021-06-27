@@ -1,0 +1,5 @@
+class CreateUserCaseController {
+
+}
+
+export { CreateUserCaseController }

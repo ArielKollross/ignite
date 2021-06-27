@@ -1,0 +1,42 @@
+import { Column, CreateDateColumn, Entity, PrimaryColumn } from 'typeorm';
+import { v4 as uuidV4 } from 'uuid';
+
+// entidade ("table name")
+@Entity('users')
+class User {
+  @PrimaryColumn()
+  id?: string;
+
+  @Column()
+  name: string;
+
+  @Column()
+  user: string;
+
+  @Column()
+  username: string
+
+  @Column()
+  email: string
+
+  @Column()
+  password: string
+
+  @Column()
+  drive_license: string
+
+  @Column()
+  isAdmin: boolean
+
+  @CreateDateColumn()
+  created_at: Date;
+
+  // this a method is call when class is instantiated
+  constructor() {
+    if (!this.id) {
+      this.id = uuidV4();
+    }
+  }
+}
+
+export { User };
