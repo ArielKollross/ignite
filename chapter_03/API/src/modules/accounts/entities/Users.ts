@@ -1,7 +1,6 @@
 import { Column, CreateDateColumn, Entity, PrimaryColumn } from 'typeorm';
 import { v4 as uuidV4 } from 'uuid';
 
-// entidade ("table name")
 @Entity('users')
 class User {
   @PrimaryColumn()
@@ -9,12 +8,6 @@ class User {
 
   @Column()
   name: string;
-
-  @Column()
-  user: string;
-
-  @Column()
-  username: string
 
   @Column()
   email: string
