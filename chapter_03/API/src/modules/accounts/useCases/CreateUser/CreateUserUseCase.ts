@@ -1,31 +1,38 @@
-import { inject, injectable } from "tsyringe";
-import { ICreateUserDTO } from "../../DTOs/ICreateUserDTO";
-import { IUserRepository } from "../../repositories/IUserRepository";
-import { hash } from 'bcrypt'
+import { hash } from 'bcrypt';
+import { inject, injectable } from 'tsyringe';
+
+import { ICreateUserDTO } from '../../DTOs/ICreateUserDTO';
+import { IUserRepository } from '../../repositories/IUserRepository';
 
 @injectable()
 class CreateUserCase {
   constructor(
-    @inject("UserRepository")
+    @inject('UserRepository')
     private userRepository: IUserRepository
   ) {}
 
-  async execute({name, password, email, drive_license}: ICreateUserDTO): Promise<void> {
+  async execute({
+    name,
+    password,
+    email,
+    drive_license,
+  }: ICreateUserDTO): Promise<void> {
+    if (!name || !password || !email || !drive_license)
+      throw new Error('Miss required field');
 
-    const findUserExists = await this.userRepository.findByEmail(email)
+    const findUserExists = await this.userRepository.findByEmail(email);
 
-    if(findUserExists)
-      throw new Error("Email is already booked")
-      
-    const passwordHash = await hash(password, 8)
+    if (findUserExists) throw new Error('Email is already booked');
+
+    const passwordHash = await hash(password, 8);
 
     await this.userRepository.create({
       name,
       password: passwordHash,
       email,
-      drive_license
-      })
+      drive_license,
+    });
   }
 }
 
-export { CreateUserCase }
+export { CreateUserCase };
